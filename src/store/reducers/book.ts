@@ -12,12 +12,18 @@ export interface IBookEntry {
   type: EBidType;
 }
 
+export type TPricePrecision = 0 | 1 | 2 | 3 | 4;
+
 interface IBookState {
   entries: { [price: number]: IBookEntry };
+  pricePrecision: TPricePrecision;
+  subscribed: boolean;
 }
 
 const initialState: IBookState = {
   entries: {},
+  pricePrecision: 0,
+  subscribed: false,
 };
 
 export const bookSlice = createSlice({
@@ -33,9 +39,18 @@ export const bookSlice = createSlice({
         }
       }
     },
+    setPrecision: (state, action: PayloadAction<TPricePrecision>) => {
+      state.pricePrecision = action.payload;
+    },
+    setSubscribed: (state, action: PayloadAction<boolean>) => {
+      state.subscribed = action.payload;
+      if (!action.payload) {
+        state.entries = {};
+      }
+    },
   },
 });
 
-export const { update } = bookSlice.actions;
+export const { update, setPrecision, setSubscribed } = bookSlice.actions;
 
 export default bookSlice.reducer;
