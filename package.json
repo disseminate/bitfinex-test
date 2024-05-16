@@ -1,0 +1,23 @@
+{
+  "name": "bitfinex-test",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:disseminate/bitfinex-test.git",
+  "author": "Kyle Windsor <kyle@kylewindsor.io>",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/react": "^18.3.2",
+    "@types/react-dom": "^18.3.0",
+    "sass": "^1.77.1",
+    "typescript": "^5.4.5",
+    "vite": "^5.2.11"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-redux": "^9.1.2"
+  },
+  "scripts": {
+    "start": "vite"
+  }
+}
