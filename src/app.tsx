@@ -1,10 +1,13 @@
 import * as React from "react";
+import { Provider } from "react-redux";
+import Store from "./store/store";
+import Book from "./components/book";
 
 const App = () => {
   return (
-    <div>
-      <h1>Order Book</h1>
-    </div>
+    <Provider store={Store}>
+      <Book />
+    </Provider>
   );
 };
 
