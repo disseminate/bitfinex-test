@@ -42,25 +42,12 @@ class BitfinexSocket {
   private chanId: number;
   private subscribed = false;
   private precision: TPricePrecision = 0;
+  private shouldConnect = true;
 
   private bookCallback: (data: TBitfinexBookEntry[]) => void;
   private subscriptionCallback: (subscribed: boolean) => void;
 
-  constructor() {
-    this.sock = new WebSocket(`wss://api-pub.bitfinex.com/ws/2`);
-    this.sock.addEventListener("open", () => {
-      console.log(`Socket opened.`);
-      this.subscribe();
-    });
-
-    this.sock.addEventListener("close", () => {
-      console.log(`Socket closed.`);
-    });
-
-    this.sock.addEventListener("message", (message) =>
-      this.onMessage(JSON.parse(message.data))
-    );
-  }
+  constructor() {}
 
   private subscribe() {
     const subscribeRequest: TBitfinexSubscribeRequest = {
@@ -140,6 +127,40 @@ class BitfinexSocket {
 
       this.sock.send(JSON.stringify(subscribeRequest));
     }
+  }
+
+  public disconnect() {
+    this.shouldConnect = false;
+    if (this.subscribed) {
+      this.subscribed = false;
+      if (this.subscriptionCallback) {
+        this.subscriptionCallback(false);
+      }
+    }
+    this.sock.close();
+  }
+
+  public connect() {
+    this.shouldConnect = true;
+
+    this.sock = new WebSocket(`wss://api-pub.bitfinex.com/ws/2`);
+    this.sock.addEventListener("open", () => {
+      console.log(`Socket opened.`);
+      this.subscribe();
+    });
+
+    this.sock.addEventListener("close", () => {
+      console.log(`Socket closed.`);
+
+      // attempt to reconnect
+      if (this.shouldConnect) {
+        this.connect();
+      }
+    });
+
+    this.sock.addEventListener("message", (message) =>
+      this.onMessage(JSON.parse(message.data))
+    );
   }
 }
 

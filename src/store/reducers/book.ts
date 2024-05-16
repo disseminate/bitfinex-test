@@ -18,12 +18,14 @@ interface IBookState {
   entries: { [price: number]: IBookEntry };
   pricePrecision: TPricePrecision;
   subscribed: boolean;
+  connected: boolean;
 }
 
 const initialState: IBookState = {
   entries: {},
   pricePrecision: 0,
   subscribed: false,
+  connected: true,
 };
 
 export const bookSlice = createSlice({
@@ -48,9 +50,17 @@ export const bookSlice = createSlice({
         state.entries = {};
       }
     },
+    setConnected: (state, action: PayloadAction<boolean>) => {
+      state.connected = action.payload;
+      state.subscribed = false;
+      if (!action.payload) {
+        state.entries = {};
+      }
+    },
   },
 });
 
-export const { update, setPrecision, setSubscribed } = bookSlice.actions;
+export const { update, setPrecision, setSubscribed, setConnected } =
+  bookSlice.actions;
 
 export default bookSlice.reducer;

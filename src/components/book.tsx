@@ -9,6 +9,7 @@ import {
 import { useAppDispatch, useAppSelector } from "../store/store";
 import styled from "styled-components";
 import Controls from "./controls";
+import BookTable from "./bookTable";
 
 const Page = styled.div`
   position: absolute;
@@ -27,26 +28,22 @@ const Container = styled.div`
   flex-wrap: nowrap;
 `;
 
-const Table = styled.div`
-  width: 50%;
-`;
-
-interface IRowProps {
-  $header?: boolean;
-}
-
-const Row = styled.div<IRowProps>`
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-  text-transform: ${(props) => (props.$header ? "uppercase" : "initial")};
-  opacity: ${(props) => (props.$header ? 0.6 : 1)};
-`;
-
 const Book = () => {
   const [socket, setSocket] = React.useState<BitfinexSocket>();
   React.useEffect(() => {
     setSocket(new BitfinexSocket());
   }, []);
+
+  const connected = useAppSelector((state) => state.book.connected);
+  React.useEffect(() => {
+    if (socket) {
+      if (connected) {
+        socket.connect();
+      } else {
+        socket.disconnect();
+      }
+    }
+  }, [socket, connected]);
 
   const dispatch = useAppDispatch();
 
@@ -93,42 +90,8 @@ const Book = () => {
     <Page>
       <Controls />
       <Container>
-        <Table>
-          <Row $header>
-            <div>Count</div>
-            <div>Amount</div>
-            <div>Total</div>
-            <div>Price</div>
-          </Row>
-          {askOrders.map((order) => (
-            <Row key={order.price}>
-              <div key={order.price + "-1"}>{order.count}</div>
-              <div key={order.price + "-2"}>{order.amount.toFixed(4)}</div>
-              <div key={order.price + "-3"}>
-                {(order.amount * order.count).toFixed(4)}
-              </div>
-              <div key={order.price + "-4"}>{order.price}</div>
-            </Row>
-          ))}
-        </Table>
-        <Table>
-          <Row $header>
-            <div>Price</div>
-            <div>Total</div>
-            <div>Amount</div>
-            <div>Count</div>
-          </Row>
-          {bidOrders.map((order) => (
-            <Row key={order.price}>
-              <div key={order.price + "-1"}>{order.price}</div>
-              <div key={order.price + "-2"}>
-                {(order.amount * order.count).toFixed(4)}
-              </div>
-              <div key={order.price + "-3"}>{order.amount.toFixed(4)}</div>
-              <div key={order.price + "-4"}>{order.count}</div>
-            </Row>
-          ))}
-        </Table>
+        <BookTable type={EBidType.Ask} orders={askOrders} />
+        <BookTable type={EBidType.Bid} orders={bidOrders} />
       </Container>
     </Page>
   );
