@@ -81,7 +81,11 @@ const BookTable: React.FC<IBookTableProps> = (props) => {
                 bottom: "2px",
                 left: 0,
                 right: 0,
-                fill: `${props.type == EBidType.Ask ? "green" : "red"}`,
+                fill: `${
+                  props.type == EBidType.Ask
+                    ? "rgb(1, 167, 129)"
+                    : "rgb(228, 75, 68)"
+                }`,
               }}
             >
               <rect
@@ -91,7 +95,7 @@ const BookTable: React.FC<IBookTableProps> = (props) => {
                 transform={`scale(${
                   totalVolume > 0 ? culm / totalVolume : 0
                 } 1)`} // I don't think this scale is correct, but I am on a time limit here :)
-                height="80%"
+                height="100%"
                 fillOpacity="0.2"
               ></rect>
             </svg>
