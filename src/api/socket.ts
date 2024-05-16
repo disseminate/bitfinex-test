@@ -63,7 +63,7 @@ class BitfinexSocket {
     this.sock.send(JSON.stringify(subscribeRequest));
   }
 
-  private onMessage(message: any) {
+  private onMessage(message: { [key: string]: any }) {
     if (message.event) {
       let data = message as TBitfinexMessage;
       if (data.event === "subscribed") {
