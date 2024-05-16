@@ -1,11 +1,6 @@
 import * as React from "react";
 import BitfinexSocket, { TBitfinexBookEntry } from "../api/socket";
-import {
-  EBidType,
-  IBookEntry,
-  setSubscribed,
-  update,
-} from "../store/reducers/book";
+import { EBidType, IBookEntry, setSubscribed, update } from "../store/book";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import styled from "styled-components";
 import Controls from "./controls";

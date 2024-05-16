@@ -1,4 +1,4 @@
-import { TPricePrecision } from "src/store/reducers/book";
+import { TPricePrecision } from "../store/book";
 
 type TBitfinexInfoMessage = {
   event: "info";
@@ -87,9 +87,13 @@ class BitfinexSocket {
         console.error(data);
       }
     } else {
+      if (!this.subscribed) {
+        return;
+      }
+
       if (message[0] === this.chanId) {
         if (message[1] === "hb") {
-          // do nothing
+          // heartbeat, do nothing
         } else {
           let data = message[1] as TBitfinexBookResult;
           let arr: TBitfinexBookEntry[] = [];
@@ -117,15 +121,24 @@ class BitfinexSocket {
   }
 
   public setPricePrecision(precision: TPricePrecision) {
-    this.precision = precision;
+    if (this.precision !== precision) {
+      this.precision = precision;
 
-    if (this.sock && this.sock.readyState === 1) {
-      const subscribeRequest: TBitfinexUnsubscribeRequest = {
-        event: "unsubscribe",
-        chanId: this.chanId,
-      };
+      if (this.subscribed) {
+        this.subscribed = false;
+        if (this.subscriptionCallback) {
+          this.subscriptionCallback(false);
+        }
+      }
 
-      this.sock.send(JSON.stringify(subscribeRequest));
+      if (this.sock && this.sock.readyState === 1) {
+        const subscribeRequest: TBitfinexUnsubscribeRequest = {
+          event: "unsubscribe",
+          chanId: this.chanId,
+        };
+
+        this.sock.send(JSON.stringify(subscribeRequest));
+      }
     }
   }
 

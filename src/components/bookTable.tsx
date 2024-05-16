@@ -1,5 +1,5 @@
 import * as React from "react";
-import { EBidType, IBookEntry } from "../store/reducers/book";
+import { EBidType, IBookEntry } from "../store/book";
 import styled from "styled-components";
 
 const Table = styled.div`
@@ -88,7 +88,9 @@ const BookTable: React.FC<IBookTableProps> = (props) => {
                 x="1"
                 y="0"
                 width="100%"
-                transform={`scale(${culm / totalVolume} 1)`} // I don't think this scale is correct, but I am on a time limit here :)
+                transform={`scale(${
+                  totalVolume > 0 ? culm / totalVolume : 0
+                } 1)`} // I don't think this scale is correct, but I am on a time limit here :)
                 height="80%"
                 fillOpacity="0.2"
               ></rect>

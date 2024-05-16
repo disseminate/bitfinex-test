@@ -1,5 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
-import bookReducer from "./reducers/book";
+import bookReducer from "./book";
 import { useDispatch, useSelector } from "react-redux";
 
 const store = configureStore({

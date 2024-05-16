@@ -34,10 +34,43 @@ export const bookSlice = createSlice({
   reducers: {
     update: (state, action: PayloadAction<IBookEntry[]>) => {
       for (const entry of action.payload) {
-        if (entry.count === 0) {
-          delete state.entries[entry.price];
-        } else {
-          state.entries[entry.price] = entry;
+        state.entries[entry.price] = entry;
+
+        // I noticed that the maximum returned entries from the order book total 50.
+        // To avoid layout jitter, I will only delete zeroed entries when we need the space.
+        // I think this can be done smarter but this is a timed programming test.
+        while (
+          Object.keys(state.entries).filter(
+            (k) => state.entries[k].type === EBidType.Ask
+          ).length > 25
+        ) {
+          let keys = Object.keys(state.entries);
+          for (let i = keys.length - 1; i >= 0; i--) {
+            if (
+              state.entries[keys[i]].type === EBidType.Ask &&
+              state.entries[keys[i]].count === 0
+            ) {
+              delete state.entries[keys[i]];
+              break;
+            }
+          }
+        }
+
+        while (
+          Object.keys(state.entries).filter(
+            (k) => state.entries[k].type === EBidType.Bid
+          ).length > 25
+        ) {
+          let keys = Object.keys(state.entries);
+          for (let i = keys.length - 1; i >= 0; i--) {
+            if (
+              state.entries[keys[i]].type === EBidType.Bid &&
+              state.entries[keys[i]].count === 0
+            ) {
+              delete state.entries[keys[i]];
+              break;
+            }
+          }
         }
       }
     },

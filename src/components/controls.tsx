@@ -1,9 +1,5 @@
 import * as React from "react";
-import {
-  TPricePrecision,
-  setConnected,
-  setPrecision,
-} from "../store/reducers/book";
+import { TPricePrecision, setConnected, setPrecision } from "../store/book";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -86,18 +82,24 @@ const Controls = () => {
         {subscribed ? "Connected and subscribed" : "Disconnected"}
       </ConnectionInfo>
       <ConnectionControls>
-        <IconButton onClick={disconnect} disabled={!connected}>
+        <IconButton onClick={disconnect} disabled={!connected || !subscribed}>
           <FontAwesomeIcon icon={faLinkSlash} />
         </IconButton>
-        <IconButton onClick={connect} disabled={connected}>
+        <IconButton onClick={connect} disabled={connected || !subscribed}>
           <FontAwesomeIcon icon={faLink} />
         </IconButton>
       </ConnectionControls>
       <div>
-        <IconButton onClick={decrease} disabled={precision === 4}>
+        <IconButton
+          onClick={decrease}
+          disabled={precision === 4 || !subscribed || !connected}
+        >
           <FontAwesomeIcon icon={faDownLong} />
         </IconButton>
-        <IconButton onClick={increase} disabled={precision === 0}>
+        <IconButton
+          onClick={increase}
+          disabled={precision === 0 || !subscribed || !connected}
+        >
           <FontAwesomeIcon icon={faUpLong} />
         </IconButton>
       </div>
