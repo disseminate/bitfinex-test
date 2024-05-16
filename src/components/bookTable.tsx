@@ -11,6 +11,10 @@ const RowOuter = styled.div`
   position: relative;
 `;
 
+const RightDiv = styled.div`
+  text-align: right;
+`;
+
 interface IRowProps {
   $header?: boolean;
 }
@@ -38,17 +42,17 @@ const BookTable: React.FC<IBookTableProps> = (props) => {
       <RowOuter>
         {props.type === EBidType.Ask ? (
           <Row $header>
-            <div>Count</div>
-            <div>Amount</div>
-            <div>Total</div>
-            <div>Price</div>
+            <RightDiv>Count</RightDiv>
+            <RightDiv>Amount</RightDiv>
+            <RightDiv>Total</RightDiv>
+            <RightDiv>Price</RightDiv>
           </Row>
         ) : (
           <Row $header>
-            <div>Price</div>
-            <div>Total</div>
-            <div>Amount</div>
-            <div>Count</div>
+            <RightDiv>Price</RightDiv>
+            <RightDiv>Total</RightDiv>
+            <RightDiv>Amount</RightDiv>
+            <RightDiv>Count</RightDiv>
           </Row>
         )}
       </RowOuter>
@@ -84,24 +88,24 @@ const BookTable: React.FC<IBookTableProps> = (props) => {
                 x="1"
                 y="0"
                 width="100%"
-                transform={`scale(${culm / totalVolume} 1)`}
+                transform={`scale(${culm / totalVolume} 1)`} // I don't think this scale is correct, but I am on a time limit here :)
                 height="80%"
                 fillOpacity="0.2"
               ></rect>
             </svg>
             {props.type === EBidType.Ask ? (
               <Row>
-                <div>{order.count}</div>
-                <div>{order.amount.toFixed(4)}</div>
-                <div>{(order.amount * order.count).toFixed(4)}</div>
-                <div>{order.price}</div>
+                <RightDiv>{order.count}</RightDiv>
+                <RightDiv>{order.amount.toFixed(4)}</RightDiv>
+                <RightDiv>{(order.amount * order.count).toFixed(4)}</RightDiv>
+                <RightDiv>{order.price}</RightDiv>
               </Row>
             ) : (
               <Row>
-                <div>{order.price}</div>
-                <div>{(order.amount * order.count).toFixed(4)}</div>
-                <div>{order.amount.toFixed(4)}</div>
-                <div>{order.count}</div>
+                <RightDiv>{order.price}</RightDiv>
+                <RightDiv>{(order.amount * order.count).toFixed(4)}</RightDiv>
+                <RightDiv>{order.amount.toFixed(4)}</RightDiv>
+                <RightDiv>{order.count}</RightDiv>
               </Row>
             )}
           </RowOuter>

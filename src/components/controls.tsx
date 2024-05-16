@@ -6,6 +6,13 @@ import {
 } from "../store/reducers/book";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import styled from "styled-components";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faDownLong,
+  faLink,
+  faLinkSlash,
+  faUpLong,
+} from "@fortawesome/free-solid-svg-icons";
 
 const ControlsContainer = styled.div`
   margin-bottom: 20px;
@@ -15,8 +22,8 @@ const ConnectionControls = styled.div`
   margin-bottom: 10px;
 `;
 
-const ConnectionInfo = styled.span`
-  margin-right: 20px;
+const ConnectionInfo = styled.div`
+  margin-bottom: 10px;
 `;
 
 const IconButton = styled.button`
@@ -75,23 +82,23 @@ const Controls = () => {
   );
   return (
     <ControlsContainer>
+      <ConnectionInfo>
+        {subscribed ? "Connected and subscribed" : "Disconnected"}
+      </ConnectionInfo>
       <ConnectionControls>
-        <ConnectionInfo>
-          {subscribed ? "Connected and subscribed" : "Disconnected"}
-        </ConnectionInfo>
         <IconButton onClick={disconnect} disabled={!connected}>
-          Disconnect
+          <FontAwesomeIcon icon={faLinkSlash} />
         </IconButton>
         <IconButton onClick={connect} disabled={connected}>
-          Connect
+          <FontAwesomeIcon icon={faLink} />
         </IconButton>
       </ConnectionControls>
       <div>
         <IconButton onClick={decrease} disabled={precision === 4}>
-          Decrease Precision
+          <FontAwesomeIcon icon={faDownLong} />
         </IconButton>
         <IconButton onClick={increase} disabled={precision === 0}>
-          Increase Precision
+          <FontAwesomeIcon icon={faUpLong} />
         </IconButton>
       </div>
     </ControlsContainer>
