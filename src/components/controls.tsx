@@ -85,7 +85,7 @@ const Controls = () => {
         <IconButton onClick={disconnect} disabled={!connected || !subscribed}>
           <FontAwesomeIcon icon={faLinkSlash} />
         </IconButton>
-        <IconButton onClick={connect} disabled={connected || !subscribed}>
+        <IconButton onClick={connect} disabled={connected || subscribed}>
           <FontAwesomeIcon icon={faLink} />
         </IconButton>
       </ConnectionControls>
